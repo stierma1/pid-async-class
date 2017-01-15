@@ -1,0 +1,29 @@
+{
+  "name": "pid-async-class",
+  "version": "1.0.0",
+  "description": "",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "node --harmony node_modules/jest/bin/jest.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stierma1/pid-async-class.git"
+  },
+  "jest": {
+    "collectCoverage": true
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/stierma1/pid-async-class/issues"
+  },
+  "homepage": "https://github.com/stierma1/pid-async-class#readme",
+  "dependencies": {
+    "node-schedule": "^1.2.0",
+    "pid-system": "^3.0.4"
+  },
+  "devDependencies": {
+    "jest": "^18.1.0"
+  }
+}
