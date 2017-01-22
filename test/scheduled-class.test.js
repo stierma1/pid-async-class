@@ -34,6 +34,48 @@ describe("ScheduledAsyncClass", () =>{
     })
   });
 
+  it("scheduleSimul should accept cron string and invoke a function", async () => {
+    var a = new ScheduledAsync();
+    await a.__done;
+    return new Promise((res) => {
+      var blankFn = (clazz, method) => {
+        expect(method).toBe("__getDone");
+        res();
+      };
+      a.addInterceptor(blankFn);
+      a.scheduleSimul("*/1 * * * * *", "__getDone");
+    })
+
+  });
+
+  it("scheduleSimul should accept number and invoke a function", async () => {
+    var a = new ScheduledAsync();
+    await a.__done;
+    return new Promise((res) => {
+      var blankFn = (clazz, method) => {
+        expect(method).toBe("__getDone");
+        res();
+      };
+      a.addInterceptor(blankFn);
+      a.scheduleSimul(1000, "__getDone");
+    })
+  });
+
+  it("scheduleSimul should cancel previous cron string if multiple are set", async () => {
+    var a = new ScheduledAsync();
+    await a.__done;
+    var task = a.scheduleSimul("*/1 * * * * *", "__getDone");
+    return new Promise((res) => {
+      var blankFn = (clazz, method) => {
+        expect(method).toBe("__getDone");
+        expect(a.__scheduled["__getDone"][1000]).not.toBe(task)
+        res();
+      };
+      a.addInterceptor(blankFn);
+      a.scheduleSimul("*/1 * * * * *", "__getDone");
+    })
+  });
+
   it("schedule should cancel previous cron string if multiple are set", async () => {
     var a = new ScheduledAsync();
     await a.__done;

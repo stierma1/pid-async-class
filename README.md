@@ -70,4 +70,8 @@ Returns a promise that will return the class upon complete construction, params 
 
 ####function a([methodName, ...params]) -> Promise\<[status, returnValue]\>
 
-invokes a method asynchronously on the class.
+invokes a method asynchronously on the class in the classes subprocess.  The class subprocess can only invoke one method at a time.
+
+####function aPass([methodName, ...params]) -> Promise\<[status, returnValue]\>
+
+invokes a method asynchronously on the class in its own subprocess.

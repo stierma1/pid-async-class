@@ -66,6 +66,15 @@ describe("BaseAsyncClass", () =>{
     expect(status).toBe("ERR");
   });
 
+  it("aPass should invoke a method asynchronously and return error if fails", async () => {
+    var a = new BaseAsync(true);
+    a.__completeConstruction();
+    await a.__getDone();
+    var blankFn = () => {};
+    var [status, err] = await a.aPass(["bacon", blankFn]);
+    expect(status).toBe("ERR");
+  });
+
   it("a should invoke all interceptors", async () => {
     var a = new BaseAsync(true);
     a.__completeConstruction();
