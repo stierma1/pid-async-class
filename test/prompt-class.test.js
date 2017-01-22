@@ -3,16 +3,12 @@ var ScheduledAsync = require("./../lib/scheduled-class");
 var nEw = require("../lib/statics");
 
 describe("PromptAsyncClass", () =>{
-  var mockReadLib = function(retFlag){
-    return {
-      returnFlag: retFlag,
-      question: function(str, fN){
-        fN(retFlag);
-      },
-      close: function(){
-        return retFlag
-      }
-    }
+  var mockReadLib = function(options, cb){
+    return cb(null, options);
+  }
+
+  var mockReadLibErr = function(options, cb){
+    return cb(options);
   }
 
   it("extends ScheduledAsync", () => {
@@ -22,67 +18,34 @@ describe("PromptAsyncClass", () =>{
 
   it("should initialize with stdin and stdout as streams by default", async () => {
     var a = await nEw(PromptAsync)
-    expect(a.__promptInterface).toBe(null);
     expect(a.__promptInterfaceConfig.input).toBe(process.stdin);
     expect(a.__promptInterfaceConfig.output).toBe(process.stdout);
   });
 
   it("should be able to pass in interfaces", async () => {
     var a = await nEw(PromptAsync, {input:"A", output:"B"})
-    expect(a.__promptInterface).toBe(null);
     expect(a.__promptInterfaceConfig.input).toBe("A");
     expect(a.__promptInterfaceConfig.output).toBe("B");
 
   });
 
-  it("open should set __promptInterface", async () => {
+  it("should prompt with options", async () => {
     var a = await nEw(PromptAsync)
-    a.__readlineLib = mockReadLib;
-    a.open();
-    expect(a.__promptInterface).not.toBe(null);
+    a.__promptInterface = mockReadLib;
+    var val = await a.prompt("What What", true, "*")
   });
 
-  it("close should unset __promptInterface", async () => {
+  it("should throw error if error exists", async () => {
     var a = await nEw(PromptAsync)
-    a.__readlineLib = mockReadLib;
-    a.open();
-    a.close();
-    expect(a.__promptInterface).toBe(null);
-  });
-
-  it("close should do nothing if __promptInterface is not set", async () => {
-    var a = await nEw(PromptAsync)
-    a.__readlineLib = mockReadLib;
-    a.close();
-    expect(a.__promptInterface).toBe(null);
-  });
-
-  it("prompt should return promise if interface is set", async () => {
-    var a = await nEw(PromptAsync, "I am a flag")
-    a.__readlineLib = mockReadLib;
-    a.open();
-    var promptRes = await a.prompt("some question");
-    expect(promptRes).toBe("I am a flag");
-  });
-
-  it("prompt should throw exception if interface is not open", async () => {
-    var a = await nEw(PromptAsync, "I am a flag")
-    a.__readlineLib = mockReadLib;
+    a.__promptInterface = mockReadLibErr;
     try{
-      a.prompt("some question");
+      await a.prompt("What What")
     } catch(err){
       return;
     }
-    throw new Error("Should not reach here")
-
+    throw new Error("Should not have reached here")
   });
 
-  it("__destroy should close __promptInterface", async () => {
-    var a = await nEw(PromptAsync)
-    a.__readlineLib = mockReadLib;
-    a.open();
-    a.__destroy();
-    expect(a.__promptInterface).toBe(null);
-  });
+
 
 })

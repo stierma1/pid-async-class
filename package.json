@@ -1,6 +1,6 @@
 {
   "name": "pid-async-class",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "",
   "main": "lib/index.js",
   "scripts": {
@@ -21,7 +21,8 @@
   "homepage": "https://github.com/stierma1/pid-async-class#readme",
   "dependencies": {
     "node-schedule": "^1.2.0",
-    "pid-system": "^3.0.4"
+    "pid-system": "^3.0.4",
+    "read": "^1.0.7"
   },
   "devDependencies": {
     "jest": "^18.1.0"
