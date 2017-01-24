@@ -1,4 +1,5 @@
 var BaseAsync = require("./../lib/base-class");
+var System  = require("pid-system");
 
 describe("BaseAsyncClass", () =>{
   it("should not be fully instantiated immediately", () => {
@@ -36,6 +37,31 @@ describe("BaseAsyncClass", () =>{
     var blankFn = () => {};
     a.addInterceptor(blankFn);
     expect(a.__interceptors[0]).toBe(blankFn)
+  });
+
+  it("register should register the process", async () => {
+    var a = new BaseAsync(true);
+    a.__completeConstruction();
+    await a.__getDone();
+    await a.register("myInstance");
+    expect(await System.resolve("myInstance")).toBe(a.__process)
+  });
+
+  it("resolve should resolve a class", async () => {
+    var a = new BaseAsync(true);
+    a.__completeConstruction();
+    await a.__getDone();
+    await a.register("myInstance");
+    expect(await a.resolve("myInstance")).toBe(a)
+  });
+
+  it("resolve should resolve a class", async () => {
+    var a = new BaseAsync(true);
+    a.__completeConstruction();
+    await a.__getDone();
+    await a.register("myInstance");
+    await a.unregister("myInstance");
+    expect(await a.resolve("myInstance")).toBe(null)
   });
 
 
