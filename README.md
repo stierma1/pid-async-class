@@ -41,10 +41,6 @@ class MyClass extends ScheduledAsync{
     this.suffix = suffix;
   }
 
-  myFunc(x){
-    return x + 1
-  }
-
   myLog(message){
     console.log(message + this.suffix);
   }
@@ -60,6 +56,38 @@ myInstance.schedule(1000, "myLog", ["Hello "]);
 
 //This will perform the myLog with message 'Hello World' function every second
 ```
+
+###Proxy schedule
+Similar to Schedule Class but only requires an existing class instance and not inheritance
+
+```javascript
+var nEw = require("pid-async-class").nEw;
+var ProxyAsync = require("pid-async-class").ProxyAsync;
+
+class MyClass {
+  constructor(suffix){
+    super();
+    this.suffix = suffix;
+  }
+
+  myLog(message){
+    console.log(message + this.suffix);
+  }
+}
+
+var myInstance = new MyClass("World");
+
+var myProxy = await nEw(ProxyAsync, myInstance);
+
+//Cron format
+myProxy.schedule("*/1 * * * * *", "myLog", ["Hello "]);
+
+//Milliseconds format
+myProxy.schedule(1000, "myLog", ["Hello "]);
+
+//This will perform the myLog with message 'Hello World' function every second
+```
+
 
 ##API
 
