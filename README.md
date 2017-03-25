@@ -53,10 +53,10 @@ class MyClass extends ScheduledAsync{
 var myInstance = await nEw(MyClass, "World");
 
 //Cron format
-myInstance.schedule("*/1 * * * * *", "myLog", "Hello ");
+myInstance.schedule("*/1 * * * * *", "myLog", ["Hello "]);
 
 //Milliseconds format
-myInstance.schedule(1000, "myLog", "Hello ");
+myInstance.schedule(1000, "myLog", ["Hello "]);
 
 //This will perform the myLog with message 'Hello World' function every second
 ```
@@ -70,8 +70,22 @@ Returns a promise that will return the class upon complete construction, params 
 
 ####function a([methodName, ...params]) -> Promise\<[status, returnValue]\>
 
-invokes a method asynchronously on the class in the classes subprocess.  The class subprocess can only invoke one method at a time.
+invokes a method asynchronously on the class in the classes subprocess.  The class subprocess can only invoke one 'a' method at a time.  Other 'a' calls will queue up.
 
 ####function aPass([methodName, ...params]) -> Promise\<[status, returnValue]\>
 
-invokes a method asynchronously on the class in its own subprocess.
+invokes a method asynchronously on the class in its own subprocess.  Multiple can run at the same time.
+
+###class ScheduledAsync extends BaseAsync
+
+####function schedule(CronString or number(milliseconds), methodName, Array<any> Params) -> undefined
+
+Invokes the method according to the cron string or number, with params.  Note this will perform only one scheduled task at a time.  Others will wait in a queue until the class process is open.
+
+####function scheduleSimul(CronString or number(milliseconds), methodName, Array<any> Params) -> undefined
+
+Invokes the method according to the cron string or number, with params.  Note this will perform the scheduled tasks in their own coroutine so concurrent scheduled tasks can occur.
+
+####function cancel(methodName, CronString or number(milliseconds)) -> undefined
+
+Will cancel the scheduled task given the methodName and matching CronString or number
