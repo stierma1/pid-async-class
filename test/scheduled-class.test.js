@@ -106,6 +106,13 @@ describe("ScheduledAsyncClass", () =>{
     })
   });
 
+  it("cancelAll should cancelAll intervals", async () => {
+    var a = new ScheduledAsync();
+    await a.__done;
+    var task = a.schedule(1000, "__getDone");
+    a.cancelAll();
+  });
+
   it("cancel should cancel interval if set", async () => {
     var a = new ScheduledAsync();
     await a.__done;

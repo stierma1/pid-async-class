@@ -58,7 +58,7 @@ myInstance.schedule(1000, "myLog", ["Hello "]);
 ```
 
 ###Proxy schedule
-Similar to Schedule Class but only requires an existing class instance and not inheritance
+Similar to Schedule Class but only requires an existing class instance and not inheritance, you can swap instances at runtime.
 
 ```javascript
 var nEw = require("pid-async-class").nEw;
@@ -86,6 +86,20 @@ myProxy.schedule("*/1 * * * * *", "myLog", ["Hello "]);
 myProxy.schedule(1000, "myLog", ["Hello "]);
 
 //This will perform the myLog with message 'Hello World' function every second
+class MyClass2{
+  constructor(suffix){
+    super();
+    this.suffix = suffix;
+  }
+
+  myLog2(message){
+    console.log(message + this.suffix);
+  }
+}
+
+myProxy.cancelAll();
+//Swap Instances at runtime!!! (remember to cancel previous schedules)
+myProxy.swapInstance(new MyClass2("World"));
 ```
 
 
@@ -117,3 +131,7 @@ Invokes the method according to the cron string or number, with params.  Note th
 ####function cancel(methodName, CronString or number(milliseconds)) -> undefined
 
 Will cancel the scheduled task given the methodName and matching CronString or number
+
+####function cancelAll() -> undefined
+
+Will cancelAll the scheduled tasks
